@@ -15,11 +15,14 @@ class Chatbox extends React.Component {
 
   handleTyping(e) {
     this.setState({ message: e.target.value })
+    
   }
 
   addMessage(e){
     e.preventDefault()
-    this.setState({ logs: this.state.logs.concat(this.state.message), message: '' })
+    if(this.state.message !== ''){
+      this.setState({ logs: this.state.logs.concat(this.state.message), message: '' })
+    }
   }
 
   render() {

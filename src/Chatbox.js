@@ -5,6 +5,7 @@ import Logs from './Logs.js'
 class Chatbox extends React.Component {
   constructor(props) {
     super(props)
+    
     this.handleTyping = this.handleTyping.bind(this)
     this.addMessage = this.addMessage.bind(this)
     this.state = {
@@ -15,7 +16,6 @@ class Chatbox extends React.Component {
 
   handleTyping(e) {
     this.setState({ message: e.target.value })
-    
   }
 
   addMessage(e){
@@ -26,6 +26,7 @@ class Chatbox extends React.Component {
   }
 
   render() {
+    
     return (
       <div>
         <Logs logs={this.state.logs}/>

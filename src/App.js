@@ -1,6 +1,7 @@
-import React from 'react';
+import React from 'react'
+import axios from 'axios'  
 import Room from './Room.js'
-import EnterRoomForm from "./roomForm.js";
+import EnterRoomForm from "./roomForm.js"
 
 class App extends React.Component {
   constructor(props) {
@@ -9,20 +10,40 @@ class App extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.state = {
       currentScreen: 'WhatIsYourRoomScreen',
-      roomName: ''
+      roomName: '',
+      error: ''
     }
   }
 
   handleSubmit(e) {
     e.preventDefault()
     
-    if (this.state.roomName === 'test') {
-      this.setState({ currentScreen: 'ChatRoomScreen' })
-    }
+    axios.post( 'http://localhost:3001/rooms', {
+      headers: { 'Content-Type': 'application/json' }, 
+      body: { roomName: this.state.roomName }
+    })
+    .then( ({data}) => {
+      switch (data.type) {
+        case 'ROOM_CREATED':
+          this.setState({ currentScreen: 'ChatRoomScreen' })
+          break;
+        
+        case 'ALREADY_EXISTS':
+          this.setState({ error: 'This room already exists' })
+          break;
+
+        case 'FULL_ROOM':
+          this.setState({ error: 'This room is full' })
+          break;
+
+        default:
+          this.setState({ error: 'Unknown error' })
+          break;
+      }
+    })
   }
 
   handleChange(e) {
-    console.log(e.target.value);
     
     this.setState({ roomName: e.target.value })
   }
@@ -32,7 +53,7 @@ class App extends React.Component {
       return <Room roomName={this.state.roomName}/>
     }
 
-    return <EnterRoomForm handleSubmit={this.handleSubmit} handleChange={this.handleChange}/>
+    return <EnterRoomForm handleSubmit={this.handleSubmit} handleChange={this.handleChange} error={this.state.error}/>
   }
   
 }

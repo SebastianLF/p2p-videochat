@@ -15,7 +15,7 @@ router.route('/add').post((req, res) => {
             if(result) {
                 res.status(200).json(result)
             } else {
-                const newRoom = new Room({name, participants: [], log: []})
+                const newRoom = new Room({name, participants: [], messages: []})
 
                 newRoom.save()
                 .then(() => res.status(201).json(newRoom))
@@ -47,5 +47,30 @@ router.route('/update/:id').post( (req, res) => {
     })
     .catch((req, res) => res.json('Error: ' + err))
 })
+
+router.route('/:roomName/messages/add').post( (req, res) => {
+    const roomName = req.params.roomName
+    const message = req.body.message
+    
+    Room.findOne({ name: roomName })
+    .then((room) => {
+        const messages = room.messages
+        messages.push(message)
+
+        room.save()
+            .then(() => res.json('Message added!'))
+            .catch(err => res.status(400).json('Error: ' + err))
+    })
+    .catch(err => res.status(400).json('Error: ' + err))
+})
+
+router.route('/:roomName/messages/').get( (req, res) => {
+    const roomName = req.params.roomName
+
+    Room.findOne({ name: roomName })
+        .then((room) => res.json(room.messages))
+        .catch(err => res.status(400).json('Error: ' + err))
+})
+
 
 module.exports = router

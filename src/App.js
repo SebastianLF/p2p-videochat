@@ -2,7 +2,6 @@ import React from 'react'
 import axios from 'axios'  
 import Room from './Room.js'
 import EnterRoomForm from "./roomForm.js"
-import { maxHeaderSize } from 'http';
 
 class App extends React.Component {
   constructor(props) {
@@ -18,8 +17,7 @@ class App extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault()
-
-    const nameInput = e.target.value
+    const nameInput = this.state.roomName
 
     // font-end input validation
     if(nameInput.length > 10) {

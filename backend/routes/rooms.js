@@ -14,16 +14,14 @@ router.route('/add').post((req, res) => {
         .then( result => {
             if(result) {
                 res.status(200).json(result)
+            } else {
+                const newRoom = new Room({name, participants: [], log: []})
+
+                newRoom.save()
+                .then(() => res.status(201).json(newRoom))
+                .catch(err => res.status(400).json('Error: ' + err))
             }
-
-            res.status(201).json('aucune room trouvé. Creation!')
         })
-
-    const newRoom = new Room({name, participants: [], log: []})
-
-    newRoom.save()
-    .then(() => res.json(newRoom))
-    .catch(err => res.status(400).json('Error: ' + err))
 })
 
 router.route('/add/:id').get((req, res) => {

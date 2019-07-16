@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'  
 import Room from './Room.js'
 import EnterRoomForm from "./roomForm.js"
+import { maxHeaderSize } from 'http';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,18 +18,32 @@ class App extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault()
+
+    const nameInput = e.target.value
+
+    // font-end input validation
+    if(nameInput.length > 10) {
+      this.setState({ error: "Your room name should contains 10 characters maximum" })
+    }
     
-    axios.post( 'http://localhost:3001/rooms/add', {
-      name: this.state.roomName
+
+    // API request: Join a room or create if it does not exists.
+    axios.post( 'http://localhost:3001/rooms/add', { name: this.state.roomName })
+    .then( (response) => {
+      
+      if(response.status === 200 || response.status === 201) {
+        this.setState({ currentScreen: 'ChatRoomScreen' })
+      }
     })
-    .then( ({data}) => {
-      this.setState({ currentScreen: 'ChatRoomScreen' })
-    })
-    .catch( err => this.state.error ) 
+    .catch( err => this.state.error )
   }
 
   handleChange(e) {
     this.setState({ roomName: e.target.value })
+  }
+
+  onComponentDidMount() {
+    this.setState({ roomName: '' })
   }
 
   render() {

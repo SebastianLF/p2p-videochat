@@ -10,7 +10,16 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
     const name = req.body.name
 
-    const newRoom = new Room({name, creator: , participants: [], log: []})
+    Room.findOne({ name: name })
+        .then( result => {
+            if(result) {
+                res.status(200).json(result)
+            }
+
+            res.status(201).json('aucune room trouvé. Creation!')
+        })
+
+    const newRoom = new Room({name, participants: [], log: []})
 
     newRoom.save()
     .then(() => res.json(newRoom))

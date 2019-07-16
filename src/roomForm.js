@@ -4,10 +4,12 @@ const RoomForm = ({ handleChange, handleSubmit, error }) => {
 
     return (
         <div>
-            <h1>Enter a room:</h1>
+            <h2>SKYPE CLONE</h2>
             <form onSubmit={ handleSubmit }>
-                <input type='text' onChange={ handleChange }></input>
-                <input type='submit' value='send'></input>
+                <label>Room:
+                    <input type='text' onChange={ handleChange }></input>
+                </label>
+                <input type='submit' value='JOIN'></input>
             </form>
             <div>{ error !== '' ? error : '' }</div>
         </div>

@@ -22,37 +22,6 @@ const roomsRouter = require('./routes/rooms')
 
 app.use('/rooms', roomsRouter)
 
-/* app.get('/', function(req, res){
-    res.send('Hello world!')
-})
-
-app.post('/rooms', function (req, res) {
-    const roomName = req.body.body.roomName
-    const people = 1
-    
-    // check if room is full.
-    if (people >= 2) {
-        res.json({
-            type: 'FULL_ROOM'
-        })
-    }
-
-    // check if room exists already.
-    if(rooms.find( (r) => r === roomName ) && people < 2) {
-        
-        res.json({
-            type: 'ALREADY_EXISTS'
-        })
-    }
-
-    rooms = rooms.concat(roomName)
-    console.log(rooms);
-    
-    res.status(201).json({
-        type: 'ROOM_CREATED'
-    })  
-})*/
-
 app.listen(port, function () {
     console.log(`Example app listening on port ${port}!`)
 })

@@ -18,33 +18,16 @@ class App extends React.Component {
   handleSubmit(e) {
     e.preventDefault()
     
-    axios.post( 'http://localhost:3001/rooms', {
-      headers: { 'Content-Type': 'application/json' }, 
-      body: { roomName: this.state.roomName }
+    axios.post( 'http://localhost:3001/rooms/add', {
+      name: this.state.roomName
     })
     .then( ({data}) => {
-      switch (data.type) {
-        case 'ROOM_CREATED':
-          this.setState({ currentScreen: 'ChatRoomScreen' })
-          break;
-        
-        case 'ALREADY_EXISTS':
-          this.setState({ error: 'This room already exists' })
-          break;
-
-        case 'FULL_ROOM':
-          this.setState({ error: 'This room is full' })
-          break;
-
-        default:
-          this.setState({ error: 'Unknown error' })
-          break;
-      }
+      this.setState({ currentScreen: 'ChatRoomScreen' })
     })
+    .catch( err => this.state.error ) 
   }
 
   handleChange(e) {
-    
     this.setState({ roomName: e.target.value })
   }
 

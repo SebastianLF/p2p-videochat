@@ -10,10 +10,10 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
     const name = req.body.name
 
-    const newRoom = new Room({name, participants: [], log: []})
+    const newRoom = new Room({name, creator: , participants: [], log: []})
 
     newRoom.save()
-    .then(() => res.json('Room created!'))
+    .then(() => res.json(newRoom))
     .catch(err => res.status(400).json('Error: ' + err))
 })
 

@@ -72,5 +72,10 @@ router.route('/:roomName/messages/').get( (req, res) => {
         .catch(err => res.status(400).json('Error: ' + err))
 })
 
+router.route('/:roomName/messages/:messageId/').put( (req, res) => {
+    Room.findOne({ name: roomName })
+        .then((room) => res.json(room.messages))
+        .catch(err => res.status(400).json('Error: ' + err))
+})
 
 module.exports = router

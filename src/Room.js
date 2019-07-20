@@ -1,11 +1,11 @@
 import React from "react"
-import Chatbox from './ConversationBox'
+import ConversationBox from './ConversationBox'
 
 const Room = ({ roomName }) => {
     return  (
         <div>
             <h1>{`Room: ${roomName}`}</h1>
-            <Chatbox />
+            <ConversationBox roomName={roomName} />
         </div>
     )
 }

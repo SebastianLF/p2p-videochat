@@ -15,7 +15,7 @@ router.route('/add').post((req, res) => {
             if(result) {
                 res.status(200).json(result)
             } else {
-                const newRoom = new Room({name, participants: [], messages: []})
+                const newRoom = new Room({ name, participants: [], messages: [] })
 
                 newRoom.save()
                 .then(() => res.status(201).json(newRoom))
@@ -55,10 +55,13 @@ router.route('/:roomName/messages/add').post( (req, res) => {
     Room.findOne({ name: roomName })
     .then((room) => {
         const messages = room.messages
-        messages.push(message)
+        const newMessage = {
+            text: message
+        }
+        messages.push(newMessage)
 
         room.save()
-            .then(() => res.json('Message added!'))
+            .then((room) => res.json(room))
             .catch(err => res.status(400).json('Error: ' + err))
     })
     .catch(err => res.status(400).json('Error: ' + err))

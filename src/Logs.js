@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Logs({ logs }) {
+function Logs({ messages }) {
   return (
     <div>
-      {logs.map((log) => <li>{log}</li>)}
+      {messages.map((message) => <li key={message._id}>{message.text}</li>)}
     </div>
   )
 }

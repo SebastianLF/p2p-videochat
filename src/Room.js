@@ -1,5 +1,5 @@
 import React from "react"
-import Chatbox from './Chatbox'
+import Chatbox from './ConversationBox'
 
 const Room = ({ roomName }) => {
     return  (

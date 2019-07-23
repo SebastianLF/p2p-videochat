@@ -1,9 +1,10 @@
 import React from 'react'
 
-function Logs({ messages }) {
+const Logs = ({ messages }) => {
+
   return (
     <div>
-      {messages.map((message) => <li key={message._id}>{message.text}</li>)}
+      {messages.map((message) => <li key={message._id}><span>{message.date}</span>{message.text}</li>)}
     </div>
   )
 }

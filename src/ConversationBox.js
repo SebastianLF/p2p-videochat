@@ -56,7 +56,7 @@ class Chatbox extends React.Component {
   render() {
     
     return (
-      <div>
+      <div>http://localhost:3000/
         <Logs messages={this.state.logs}/>
         <Input 
           value={this.state.message} 

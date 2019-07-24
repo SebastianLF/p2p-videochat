@@ -6,6 +6,8 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 
 const app = express()
+const server = require('http').Server(app)
+const io = require('socket.io')(server)
 const port = process.env.PORT || 3001
 
 app.use(cors())
@@ -18,10 +20,10 @@ connection.once('open', () => {
     console.log('Connection to MONGODB established!');
 })
 
-const roomsRouter = require('./routes/rooms')
+const roomsRouter = require('./routes/rooms')(io)
 
 app.use('/rooms', roomsRouter)
 
-app.listen(port, function () {
-    console.log(`Example app listening on port ${port}!`)
+server.listen(port, function () {
+    console.log(`App is listening on port ${port}!`)
 })

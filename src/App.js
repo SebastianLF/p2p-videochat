@@ -3,6 +3,7 @@ import axios from 'axios'
 import Room from './Room.js'
 import EnterRoomForm from "./roomForm.js"
 
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -23,7 +24,6 @@ class App extends React.Component {
     if(nameInput.length > 10) {
       this.setState({ error: "Your room name should contains 10 characters maximum" })
     }
-    
 
     // API request: Join a room or create if it does not exists.
     axios.post( 'http://localhost:3001/rooms/add', { name: this.state.roomName })
@@ -40,7 +40,7 @@ class App extends React.Component {
     this.setState({ roomName: e.target.value })
   }
 
-  onComponentDidMount() {
+  componentDidMount() {
     this.setState({ roomName: '' })
   }
 

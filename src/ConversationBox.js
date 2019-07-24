@@ -2,6 +2,9 @@ import React from 'react'
 import Input from './Input.js'
 import Logs from './Logs.js'
 import axios from 'axios'
+import io from 'socket.io-client'
+
+const socket = io.connect('http://localhost:3001')
 
 class Chatbox extends React.Component {
   constructor(props) {
@@ -27,7 +30,6 @@ class Chatbox extends React.Component {
       message: this.state.message
     })
     .then(({ data }) => {
-      console.log(data);
       const messages = data.messages
       
       this.setState({ logs: this.state.logs.concat(messages[messages.length - 1]), message: '' })
@@ -42,7 +44,6 @@ class Chatbox extends React.Component {
   getMessages() {
     axios.get(`http://localhost:3001/rooms/${this.props.roomName}/messages/`)
     .then((response) => {
-      console.log(response.data);
       
       this.setState({ logs: this.state.logs.concat(response.data) })
     })
@@ -50,13 +51,17 @@ class Chatbox extends React.Component {
   }
 
   componentDidMount() {
+    socket.on('message', (message) => {
+      this.setState({ logs: [...this.state.logs, message], message: '' })
+    })
+
     this.getMessages()
   }
 
   render() {
     
     return (
-      <div>http://localhost:3000/
+      <div>
         <Logs messages={this.state.logs}/>
         <Input 
           value={this.state.message} 

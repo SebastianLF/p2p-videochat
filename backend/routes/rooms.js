@@ -12,13 +12,14 @@ function roomsRouter(io) {
 
     router.route('/add').post((req, res) => {
         const name = req.body.name
+        const creator = req.body.creator
 
         Room.findOne({ name: name })
             .then( result => {
                 if(result) {
                     res.status(200).json(result)
                 } else {
-                    const newRoom = new Room({ name, messages: [] })
+                    const newRoom = new Room({ creator, name, messages: [] })
 
                     newRoom.save()
                     .then(() => res.status(201).json(newRoom))
@@ -54,11 +55,13 @@ function roomsRouter(io) {
     router.route('/:roomName/messages/add').post( (req, res) => {
         const roomName = req.params.roomName
         const message = req.body.message
+        const creator = req.body.creator
         
         Room.findOne({ name: roomName })
         .then((room) => {
             const messages = room.messages
             const newMessage = {
+                creator: creator,
                 text: message
             }
             messages.push(newMessage)

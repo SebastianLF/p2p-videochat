@@ -3,6 +3,7 @@ import Input from './Input.js'
 import Logs from './Logs.js'
 import axios from 'axios'
 import io from 'socket.io-client'
+import { getUsername } from './localStorage.js'
 
 const socket = io.connect('http://localhost:3001')
 
@@ -27,7 +28,8 @@ class Chatbox extends React.Component {
     e.preventDefault()
 
     axios.post(`http://localhost:3001/rooms/${this.props.roomName}/messages/add`, {
-      message: this.state.message
+      message: this.state.message,
+      creator: getUsername('username')
     })
     .then(({ data }) => {
       const messages = data.messages

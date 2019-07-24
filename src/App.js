@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'  
 import Room from './Room.js'
 import EnterRoomForm from "./roomForm.js"
+import { getUsername } from "./localStorage.js"
 
 
 class App extends React.Component {
@@ -26,7 +27,7 @@ class App extends React.Component {
     }
 
     // API request: Join a room or create if it does not exists.
-    axios.post( 'http://localhost:3001/rooms/add', { name: this.state.roomName })
+    axios.post( 'http://localhost:3001/rooms/add', { name: this.state.roomName, creator: getUsername('username') })
     .then( (response) => {
       
       if(response.status === 200 || response.status === 201) {
@@ -39,7 +40,7 @@ class App extends React.Component {
   handleChange(e) {
     this.setState({ roomName: e.target.value })
   }
-
+  
   componentDidMount() {
     this.setState({ roomName: '' })
   }

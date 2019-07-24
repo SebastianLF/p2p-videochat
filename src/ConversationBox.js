@@ -27,20 +27,18 @@ class Chatbox extends React.Component {
   sendMessage(e){
     e.preventDefault()
 
-    axios.post(`http://localhost:3001/rooms/${this.props.roomName}/messages/add`, {
+    if(this.state.message !== '') {
+      axios.post(`http://localhost:3001/rooms/${this.props.roomName}/messages/add`, {
       message: this.state.message,
       creator: getUsername('username')
-    })
-    .then(({ data }) => {
-      const messages = data.messages
-      
-      this.setState({ logs: this.state.logs.concat(messages[messages.length - 1]), message: '' })
-    })
-    .catch((err) => this.setState({ error: err }))
-
-    /* if(this.state.message !== ''){
-      this.setState({ logs: this.state.logs.concat(this.state.message), message: '' })
-    } */
+      })
+      .then(({ data }) => {
+        const messages = data.messages
+        
+        this.setState({ logs: this.state.logs.concat(messages[messages.length - 1]), message: '' })
+      })
+      .catch((err) => this.setState({ error: err }))
+    }
   }
 
   getMessages() {

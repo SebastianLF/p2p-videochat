@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 
 const roomSchema = new Schema({
     name: { type: String, required: true, unique: true, trim: true },
-    participants: { type: Array, required: true },
     messages: [
         { 
             text: String,

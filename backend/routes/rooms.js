@@ -1,5 +1,6 @@
 const router = require('express').Router()
 let Room = require('../models/room.model')
+let User = require('../models/users.model')
 
 function roomsRouter(io) {
 
@@ -17,7 +18,7 @@ function roomsRouter(io) {
                 if(result) {
                     res.status(200).json(result)
                 } else {
-                    const newRoom = new Room({ name, participants: [], messages: [] })
+                    const newRoom = new Room({ name, messages: [] })
 
                     newRoom.save()
                     .then(() => res.status(201).json(newRoom))

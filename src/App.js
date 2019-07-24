@@ -26,7 +26,7 @@ class App extends React.Component {
     }
 
     // API request: Join a room or create if it does not exists.
-    axios.post( 'http://localhost:3001/rooms/add', { name: this.state.roomName })
+    axios.post( 'http://localhost:3001/rooms/add', { name: this.state.roomName, creator: this.getUsername() })
     .then( (response) => {
       
       if(response.status === 200 || response.status === 201) {
@@ -38,6 +38,27 @@ class App extends React.Component {
 
   handleChange(e) {
     this.setState({ roomName: e.target.value })
+  }
+
+  getUsername() {
+    const key = 'username'
+
+    if(!localStorage.getItem(key)) {
+      localStorage.setItem('username', this.generateUniqueUsername())
+    }
+
+    return localStorage.getItem(key)
+  }
+
+  generateUniqueUsername() {
+    // Math.random should be unique because of its seeding algorithm.
+    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+    // after the decimal.
+    return '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  saveUsername(username) {
+    
   }
 
   componentDidMount() {

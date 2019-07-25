@@ -30,7 +30,7 @@ class Chatbox extends React.Component {
     if(this.state.message !== '') {
       axios.post(`http://localhost:3001/rooms/${this.props.roomName}/messages/add`, {
       message: this.state.message,
-      creator: getUsername('username')
+      sender: getUsername('username')
       })
       .then(({ data }) => {
         const messages = data.messages

@@ -3,12 +3,12 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const roomSchema = new Schema({
-    creator: { type: String, required: true, unique: true, trim: true },
+    creator: { type: String, required: true, trim: true },
     name: { type: String, required: true, unique: true, trim: true },
     messages: [
         { 
             text: String,
-            creator: String,
+            sender: String,
             date: {
                 type: Date,
                 default: Date.now

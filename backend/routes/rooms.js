@@ -55,13 +55,13 @@ function roomsRouter(io) {
     router.route('/:roomName/messages/add').post( (req, res) => {
         const roomName = req.params.roomName
         const message = req.body.message
-        const creator = req.body.creator
+        const sender = req.body.sender
         
         Room.findOne({ name: roomName })
         .then((room) => {
             const messages = room.messages
             const newMessage = {
-                creator: creator,
+                sender,
                 text: message
             }
             messages.push(newMessage)

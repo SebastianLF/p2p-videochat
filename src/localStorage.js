@@ -5,7 +5,7 @@ const generateUniqueUsername = () => {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 
-export const getUsername = (key) => {
+export const getUsername = (key = 'username') => {
 
     if(!localStorage.getItem(key)) {
       localStorage.setItem(key, generateUniqueUsername())

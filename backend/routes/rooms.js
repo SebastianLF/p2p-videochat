@@ -68,7 +68,7 @@ function roomsRouter(io) {
 
             room.save()
                 .then((room) => {
-                    io.emit('message', room.messages[messages.length - 1])
+                    io.sockets.to(roomName).emit('message', room.messages[messages.length - 1])
                     res.status(201).end()
                 })
                 .catch(err => res.status(400).json('Error: ' + err))

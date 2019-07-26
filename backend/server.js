@@ -2,7 +2,6 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-
 require('dotenv').config()
 
 const app = express()
@@ -23,6 +22,18 @@ connection.once('open', () => {
 const roomsRouter = require('./routes/rooms')(io)
 
 app.use('/rooms', roomsRouter)
+
+io.on('connection', function (socket) {
+    console.log('a user connected!');
+    socket.on('join', function(room) {
+        socket.join(room)
+        console.log('joined room: ' + room);
+    })
+
+    socket.on('disconnect', function () {
+        console.log('Got disconnect!');
+    })
+})
 
 server.listen(port, function () {
     console.log(`App is listening on port ${port}!`)

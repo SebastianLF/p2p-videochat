@@ -51,6 +51,7 @@ class Chatbox extends React.Component {
   }
 
   componentDidMount() {
+    socket.emit('join', this.props.roomName)
     socket.on('message', (message) => {
       this.setState({ logs: [...this.state.logs, message], message: '' })
     })

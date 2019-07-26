@@ -24,14 +24,15 @@ const roomsRouter = require('./routes/rooms')(io)
 app.use('/rooms', roomsRouter)
 
 io.on('connection', function (socket) {
-    console.log('a user connected!');
+    console.log('A user has connected!');
+    
     socket.on('join', function(room) {
         socket.join(room)
-        console.log('joined room: ' + room);
+        console.log('A user joined room: ' + room);
     })
 
     socket.on('disconnect', function () {
-        console.log('Got disconnect!');
+        console.log('A user got disconnect!');
     })
 })
 

@@ -12,12 +12,14 @@ const Logs = ({ messages }) => {
         // date = date.getHours() + ":" + date.getMinutes() + ' '
         const myStyle = {
           textAlign: "right",
-          maxWidth: "300px"
+          maxWidth: "300px",
+          borderBottom: "solid 1px #ccc"
         }
 
         const hisStyle = {
           textAlign: "left",
-          color: 'red'
+          color: '#c0392b',
+          borderBottom: "solid 1px #ccc"
         }
 
         return (

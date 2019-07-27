@@ -61,8 +61,10 @@ class Chatbox extends React.Component {
 
   render() {
     
+    const style = { height: "400px", overflow: "auto" }
+
     return (
-      <div>
+      <div style={style}>
         <Logs messages={this.state.logs}/>
         <Input 
           value={this.state.message} 

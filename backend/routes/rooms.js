@@ -4,6 +4,29 @@ let User = require('../models/users.model')
 
 function roomsRouter(io) {
 
+    const encrypt = function encrypt(username, rounds = 10) {
+
+        bcrypt.hash(username, rounds, (err, hash) => {
+            if(err) {
+            console.error(err)
+            }
+
+            return hash
+        })
+    }
+
+    const compareEncryption = function compareEncryption(username, hash) {
+        
+        bcrypt.compare(username, hash, (err, res) => {
+            if (err) {
+              console.error(err)
+              return ;
+            }
+
+            return res //true or false
+          })
+    }
+
     router.route('/').get((req, res) => {
         Room.find()
             .then((rooms) => res.json(rooms))

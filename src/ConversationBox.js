@@ -8,9 +8,9 @@ import { getUsername } from './localStorage.js'
 const socket = io.connect('http://localhost:3001')
 
 class Chatbox extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
-    
+
     this.handleTyping = this.handleTyping.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.state = {
@@ -20,37 +20,36 @@ class Chatbox extends React.Component {
     }
   }
 
-  handleTyping(e) {
+  handleTyping (e) {
     this.setState({ message: e.target.value })
   }
 
-  sendMessage(e){
+  sendMessage (e) {
     e.preventDefault()
 
-    if(this.state.message !== '') {
+    if (this.state.message !== '') {
       axios.post(`http://localhost:3001/rooms/${this.props.roomName}/messages/add`, {
-      message: this.state.message,
-      sender: getUsername('username')
+        message: this.state.message,
+        sender: getUsername('username')
       })
-      .then(({ data }) => {
-        const messages = data.messages
-        
-        this.setState({ logs: this.state.logs.concat(messages[messages.length - 1]), message: '' })
-      })
-      .catch((err) => this.setState({ error: err }))
+        .then(({ data }) => {
+          const messages = data.messages
+
+          this.setState({ logs: this.state.logs.concat(messages[messages.length - 1]), message: '' })
+        })
+        .catch((err) => this.setState({ error: err }))
     }
   }
 
-  getMessages() {
+  getMessages () {
     axios.get(`http://localhost:3001/rooms/${this.props.roomName}/messages/`)
-    .then((response) => {
-      
-      this.setState({ logs: this.state.logs.concat(response.data) })
-    })
-    .catch((err) => this.setState({ error: err }))
+      .then((response) => {
+        this.setState({ logs: this.state.logs.concat(response.data) })
+      })
+      .catch((err) => this.setState({ error: err }))
   }
 
-  componentDidMount() {
+  componentDidMount () {
     socket.emit('join', this.props.roomName)
     socket.on('message', (message) => {
       this.setState({ logs: [...this.state.logs, message], message: '' })
@@ -59,22 +58,20 @@ class Chatbox extends React.Component {
     this.getMessages()
   }
 
-  render() {
-    
-    const style = { height: "400px", overflow: "auto" }
+  render () {
+    const style = { height: '400px', overflow: 'auto' }
 
     return (
       <div style={style}>
-        <Logs messages={this.state.logs}/>
-        <Input 
-          value={this.state.message} 
-          handleTyping={this.handleTyping} 
-          sendMessage={this.sendMessage} 
-          error={this.state.err}/>
+        <Logs messages={this.state.logs} />
+        <Input
+          value={this.state.message}
+          handleTyping={this.handleTyping}
+          sendMessage={this.sendMessage}
+          error={this.state.err} />
       </div>
     )
   }
-
 }
 
 export default Chatbox

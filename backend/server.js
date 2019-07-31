@@ -1,13 +1,16 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-
-require('dotenv').config()
-
+const helmet = require('helmet')
+const dotenv = require('dotenv')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const port = process.env.PORT || 3001
+
+dotenv.config()
+
+app.use(helmet())
 
 app.use(cors())
 app.use(express.json())

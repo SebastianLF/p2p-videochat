@@ -73,16 +73,16 @@ function roomsRouter (io) {
   })
 
   router.route('/:roomName/messages/add').post((req, res) => {
-    const roomName = req.params.roomName && req.params.roomName.toString().trim() !== ''
-    const message = req.body.message && req.boby.params.message.toString().trim() !== ''
-    const sender = req.body.sender && req.boby.params.message.toString().trim() !== ''
+    const roomName = req.params.roomName
+    const message = req.body.message
+    const sender = req.body.sender
 
     Room.findOne({ name: roomName })
       .then((room) => {
         const messages = room.messages
         const newMessage = {
-          sender: sender.toString().trim(),
-          text: message.toString().trim()
+          sender: sender,
+          text: message
         }
         messages.push(newMessage)
 

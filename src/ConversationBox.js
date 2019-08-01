@@ -1,7 +1,6 @@
 import React from 'react'
 import Input from './Input.js'
 import Logs from './Logs.js'
-import axios from 'axios'
 import io from 'socket.io-client'
 import { getUsername } from './localStorage.js'
 
@@ -27,26 +26,33 @@ class Chatbox extends React.Component {
   sendMessage (e) {
     e.preventDefault()
 
-    if (this.state.message !== '') {
-      axios.post(`http://localhost:3001/rooms/${this.props.roomName}/messages/add`, {
-        message: this.state.message,
-        sender: getUsername('username')
-      })
-        .then(({ data }) => {
-          const messages = data.messages
+    const message = {
+      message: this.state.message,
+      sender: getUsername('username')
+    }
 
-          this.setState({ logs: this.state.logs.concat(messages[messages.length - 1]), message: '' })
-        })
-        .catch((err) => this.setState({ error: err }))
+    if (this.state.message !== '') {
+      
+      const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/add`
+
+      fetch(url, {  
+        method: 'POST',
+        body: JSON.stringify(message),
+        headers: { 'Content-Type': 'application/json' } 
+      })
+      .then(res => res.json())
+      .then(res => console.log(res))
+      .catch(err => this.setState({ error: err }))
     }
   }
 
   getMessages () {
-    axios.get(`http://localhost:3001/rooms/${this.props.roomName}/messages/`)
-      .then((response) => {
-        this.setState({ logs: this.state.logs.concat(response.data) })
-      })
-      .catch((err) => this.setState({ error: err }))
+    const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/`
+
+    fetch(url)
+    .then(res => res.json())
+    .then(res => this.setState({ logs: this.state.logs.concat(res) }))
+    .catch((err) => this.setState({ error: err }))
   }
 
   componentDidMount () {

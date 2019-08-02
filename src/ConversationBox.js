@@ -1,6 +1,6 @@
 import React from 'react'
 import Input from './Input.js'
-import Logs from './Logs.js'
+import MessagesContainer from './MessagesContainer.js'
 import io from 'socket.io-client'
 import { getUsername } from './localStorage.js'
 
@@ -32,31 +32,29 @@ class Chatbox extends React.Component {
     }
 
     if (this.state.message !== '') {
-      
       const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/add`
 
-      fetch(url, {  
+      window.fetch(url, {
         method: 'POST',
         body: JSON.stringify(message),
-        headers: { 'Content-Type': 'application/json' } 
+        headers: { 'Content-Type': 'application/json' }
       })
-      .then(res => res.json())
-      .then(res => console.log(res))
-      .catch(err => this.setState({ error: err }))
+        .then(res => res.json())
+        .then(res => console.log(res))
+        .catch(err => this.setState({ error: err }))
     }
   }
 
   getMessages () {
     const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/`
 
-    fetch(url)
-    .then(res => res.json())
-    .then(res => this.setState({ logs: this.state.logs.concat(res) }))
-    .catch((err) => this.setState({ error: err }))
+    window.fetch(url)
+      .then(res => res.json())
+      .then(res => this.setState({ logs: this.state.logs.concat(res) }))
+      .catch((err) => this.setState({ error: err }))
   }
 
   componentDidMount () {
-    socket.emit('join', this.props.roomName)
     socket.on('message', (message) => {
       this.setState({ logs: [...this.state.logs, message], message: '' })
     })
@@ -69,7 +67,7 @@ class Chatbox extends React.Component {
 
     return (
       <div style={style}>
-        <Logs messages={this.state.logs} />
+        <MessagesContainer messages={this.state.logs} />
         <Input
           value={this.state.message}
           handleTyping={this.handleTyping}

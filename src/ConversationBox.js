@@ -2,11 +2,14 @@ import React from 'react'
 import Input from './Input.js'
 import MessagesContainer from './MessagesContainer.js'
 import io from 'socket.io-client'
-import { getUsername } from './localStorage.js'
+import axios from 'axios'
+
+import './ConversationBox.css'
+import logo from './images/logo.png'
 
 const socket = io.connect('http://localhost:3001')
 
-class Chatbox extends React.Component {
+class ConversationBox extends React.Component {
   constructor (props) {
     super(props)
 
@@ -26,21 +29,10 @@ class Chatbox extends React.Component {
   sendMessage (e) {
     e.preventDefault()
 
-    const message = {
-      message: this.state.message,
-      sender: getUsername('username')
-    }
-
     if (this.state.message !== '') {
       const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/add`
 
-      window.fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(message),
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then(res => res.json())
-        .then(res => console.log(res))
+      axios.post(url, { message: this.state.message, sender: 'user1' })
         .catch(err => this.setState({ error: err }))
     }
   }
@@ -48,9 +40,8 @@ class Chatbox extends React.Component {
   getMessages () {
     const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/`
 
-    window.fetch(url)
-      .then(res => res.json())
-      .then(res => this.setState({ logs: this.state.logs.concat(res) }))
+    axios(url)
+      .then(({ data }) => this.setState({ logs: this.state.logs.concat(data) }))
       .catch((err) => this.setState({ error: err }))
   }
 
@@ -63,10 +54,12 @@ class Chatbox extends React.Component {
   }
 
   render () {
-    const style = { height: '400px', overflow: 'auto' }
-
     return (
-      <div style={style}>
+      <div className='conversation-box'>
+        <div className='room-profile'>
+          <img src={logo} alt='room' />
+          <p>{this.props.roomName}</p>
+        </div>
         <MessagesContainer messages={this.state.logs} />
         <Input
           value={this.state.message}
@@ -78,4 +71,4 @@ class Chatbox extends React.Component {
   }
 }
 
-export default Chatbox
+export default ConversationBox

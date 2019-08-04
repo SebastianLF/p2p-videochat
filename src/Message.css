@@ -1,0 +1,45 @@
+.message {
+    display: flex;
+    margin: 15px 15px 5px 15px;
+}
+
+.message.sent {
+    justify-content: flex-start;
+}
+
+.message.replies {
+    justify-content: flex-end;
+}
+
+.message.replies > img {
+    margin: 5px 0 0 10px;
+}
+
+.message.replies > p {
+    order: -1;
+}
+
+.message > img {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    margin: 5px 10px 0 0;
+}
+
+.message > p {
+    background: #861C7B;
+    color: #f5f5f5;
+    max-width: 320px;
+    margin: 0;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    line-height: 130%;
+    letter-spacing: 0.1px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+}
+
+.message.replies > p{
+    background: #fff;
+    color: #32465a;
+}

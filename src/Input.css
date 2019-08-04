@@ -1,0 +1,22 @@
+.send > form {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.send > form > input[name='message'] {
+    width: 100%;
+    border: none;
+    padding: 15px 10px;
+}
+
+.send > form > button {
+    border: none;
+    cursor: pointer;
+}
+
+.send > form > input[type='submit'] {
+    border: none;
+    background: #861C7B;
+    color: #fff;
+    cursor: pointer;
+}

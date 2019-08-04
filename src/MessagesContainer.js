@@ -1,10 +1,12 @@
 import React from 'react'
 import Message from './Message.js'
 
+import './MessageContainer.css'
+
 const Logs = ({ messages }) => {
   return (
-    <div>
-      {messages.map((message) => <Message message={message} />)}
+    <div className='messages'>
+      {messages.map((message) => <Message key={message._id} message={message} />)}
     </div>
   )
 }

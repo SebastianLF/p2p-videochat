@@ -1,27 +1,16 @@
 import React from 'react'
-import { getUsername } from './localStorage.js'
 
-const myStyle = {
-  textAlign: 'right',
-  maxWidth: '300px',
-  borderBottom: 'solid 1px #ccc'
-}
-
-const addresseeStyle = {
-  textAlign: 'left',
-  color: '#c0392b',
-  borderBottom: 'solid 1px #ccc'
-}
+import './Message.css'
 
 // let date = new Date(message.date)
 // date = date.getHours() + ":" + date.getMinutes() + ' '
 
 const Message = ({ message }) => {
-  const isOwner = (sender) => sender === getUsername('username')
-
+  // const isOwner = (sender) => sender === 'user3'
   return (
-    <div style={isOwner(message.sender) ? myStyle : addresseeStyle} key={message._id}>
-      <h4> {isOwner(message.sender) ? 'Vous avez dit' : `${message.sender} a dit:`} </h4>
+    <div className={message.sender === 'user3' ? 'message sent' : 'message replies'} key={message._id}>
+      <img src={message.sender === 'user3' ? 'http://emilcarlsson.se/assets/mikeross.png' : 'http://emilcarlsson.se/assets/harveyspecter.png'} alt='sender' />
+      {/* <h4> {isOwner(message.sender) ? 'Vous avez dit' : `${message.sender} a dit:`} </h4> */}
       <p>{message.text}</p>
     </div>
   )

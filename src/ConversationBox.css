@@ -1,0 +1,27 @@
+.conversation-box {
+    width: 660px;
+    margin: 70px auto;
+    font-size: 16px;
+    background: #f5f5f5;
+}
+
+.conversation-box .room-profile {
+    display: flex;
+    flex-flow: row wrap;
+    /* This aligns items to the end line on main-axis */
+    justify-content: flex-start;
+    height: 60px;
+    background: #fff;
+    color: #32465a;
+}
+
+.conversation-box .room-profile > img {
+    width: 40px;
+    height: 40px;
+    margin: 10px 12px 0 9px;
+}
+
+.conversation-box .room-profile > p {
+    margin: 20px 0px 0 0;
+    text-transform: uppercase
+}

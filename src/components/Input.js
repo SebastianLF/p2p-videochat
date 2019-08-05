@@ -7,7 +7,6 @@ function Input ({ value, handleTyping, sendMessage, error }) {
     <div className='send'>
       <form>
         <input type='text' name='message' placeholder='Your message' value={value} onChange={handleTyping} />
-        <button>JOIN</button>
         <input type='submit' value='SEND' onClick={sendMessage} />
         <p>{error}</p>
       </form>

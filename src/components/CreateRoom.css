@@ -1,0 +1,42 @@
+
+.create-room {
+    width: 400px;
+    margin: 200px auto;
+    font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+    text-align: center;
+  }
+
+  .create-room img {
+      width: 100px;
+  }
+
+  .create-room h2 {
+      color: #891C7C;
+      text-transform: uppercase;
+  }
+
+  .create-room form {
+      margin: 60px 0;
+  }
+  
+  .create-room input {
+    display: block;
+    width: 250px;
+    padding: 15px 20px;
+    margin: 10px auto;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 3px;
+    border: none;
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,.2);
+  }
+
+  .create-room .error {
+    color: #e74c3c
+  }
+
+  .create-room input[type="submit"] {
+    background-color: #891C7C;
+    color: #ffffff;
+    cursor: pointer;
+  }

@@ -1,6 +1,6 @@
 import React from 'react'
 import './Login.css'
-import logo from './images/logo.png'
+import logo from '../assets/logo.png'
 
 const Login = ({ roomName, userName, handleChange, handleSubmit, error }) => {
   return (

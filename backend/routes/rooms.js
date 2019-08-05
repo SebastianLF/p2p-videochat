@@ -1,45 +1,40 @@
 const router = require('express').Router()
 const Room = require('../models/room.model')
-const User = require('../models/users.model')
 
 function roomsRouter (io) {
-  const encrypt = function encrypt (username, rounds = 10) {
-    bcrypt.hash(username, rounds, (err, hash) => {
-      if (err) {
-        console.error(err)
-      }
-
-      return hash
-    })
-  }
-
-  const compareEncryption = function compareEncryption (username, hash) {
-    bcrypt.compare(username, hash, (err, res) => {
-      if (err) {
-        console.error(err)
-        return
-      }
-
-      return res // true or false
-    })
-  }
-
   router.route('/').get((req, res) => {
     Room.find()
       .then((rooms) => res.json(rooms))
       .catch(err => res.status(400).json('Error: ' + err))
   })
 
+  router.route('/').post((req, res) => {
+    Room.find()
+      .then((rooms) => res.json(rooms))
+      .catch(err => res.status(400).json('Error: ' + err))
+  })
+
+  // ------------------------------------------------------------------
+
+  router.route('/:roomName').get((req, res) => {
+    Room.findOne({ name: req.params.roomName }).select('-_id name participants')
+      .then(room => {
+        res.json(room)
+      })
+      .catch(err => res.status(400).json('Error: ' + err))
+  })
+
   router.route('/add').post((req, res) => {
-    const name = req.body.name
-    const creator = req.body.creator
+    const name = req.body.roomName && req.body.roomName.toString().trim()
+    const user = req.body.userName && req.body.userName.toString().trim()
 
     Room.findOne({ name: name })
-      .then(result => {
-        if (result) {
-          res.status(200).json(result)
+      .then(roomFound => {
+        if (roomFound) {
+          io.sockets.to(roomFound).emit('join', user)
+          res.status(200).json(roomFound)
         } else {
-          const newRoom = new Room({ creator, name, messages: [] })
+          const newRoom = new Room({ creator: user, name, messages: [] })
 
           newRoom.save()
             .then(() => res.status(201).json(newRoom))
@@ -69,7 +64,7 @@ function roomsRouter (io) {
           .then(() => res.json('Room updated!'))
           .catch(err => res.status(400).json('Error: ' + err))
       })
-      .catch((req, res) => res.json('Error: ' + err))
+      .catch((err) => res.json('Error: ' + err))
   })
 
   router.route('/:roomName/messages/add').post((req, res) => {
@@ -85,11 +80,9 @@ function roomsRouter (io) {
           text: message
         }
         messages.push(newMessage)
-
         room.save()
           .then((room) => {
-            io.sockets.to(roomName).emit('message', room.messages[messages.length - 1])
-            res.status(201).end()
+            res.status(201).json(newMessage)
           })
           .catch(err => res.status(400).json('Error: ' + err))
       })
@@ -105,8 +98,21 @@ function roomsRouter (io) {
   })
 
   router.route('/:roomName/messages/:messageId/').put((req, res) => {
-    Room.findOne({ name: roomName })
+    Room.findOne({ name: req.params.roomName })
       .then((room) => res.json(room.messages))
+      .catch(err => res.status(400).json('Error: ' + err))
+  })
+
+  router.route('/:roomName/participants/add').post((req, res) => {
+    Room.findOne({ name: req.params.roomName })
+      .then(room => {
+        room.participants.push(req.body.participantId)
+        room.save()
+          .then(() => {
+            res.status(200).end()
+          })
+          .catch(err => res.status(500).json('Error: ' + err))
+      })
       .catch(err => res.status(400).json('Error: ' + err))
   })
 

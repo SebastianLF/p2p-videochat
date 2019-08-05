@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 const roomSchema = new Schema({
   creator: { type: String, required: true, trim: true },
   name: { type: String, required: true, unique: true, trim: true },
+  participants: [],
   messages: [
     {
       text: String,

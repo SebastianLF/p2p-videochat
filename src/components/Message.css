@@ -19,6 +19,16 @@
     order: -1;
 }
 
+.message-info p {
+    text-align: 'center';
+    font-style: 'italic'; 
+    color: 'grey'
+}
+
+.message-info img {
+    display: none
+}
+
 .message > img {
     width: 22px;
     height: 22px;

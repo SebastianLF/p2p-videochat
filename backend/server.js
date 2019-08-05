@@ -3,6 +3,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const helmet = require('helmet')
 const dotenv = require('dotenv')
+const axios = require('axios')
 const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
@@ -27,12 +28,22 @@ const roomsRouter = require('./routes/rooms')(io)
 app.use('/rooms', roomsRouter)
 
 io.on('connection', function (socket) {
-  console.log('A user has connected!')
+  console.log('A user has connected!', socket.id)
+  const socketId = socket.id
+  socket.on('join', (room) => {
+    socket.join(room, () => {
+      const message = 'A new user entered the chat!'
 
-  socket.on('join', function (room) {
-    socket.join(room)
-    console.log('A user joined room: ' + room)
+      /* axios.post(`http://localhost:3001/rooms/${room}/messages/add`, { sender: 'server', message: room })
+        .then(() => {
+          socket.to(room).emit('joined', message)
+        })
+        .catch((err) => console.error(err)
+        ) */
+    })
   })
+
+  socket.on('sendMessage', (data) => console.log(data))
 
   socket.on('disconnect', function () {
     console.log('A user got disconnect!')

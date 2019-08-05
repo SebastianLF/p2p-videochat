@@ -1,13 +1,12 @@
 import React from 'react'
 import Input from './Input.js'
 import MessagesContainer from './MessagesContainer.js'
-import io from 'socket.io-client'
 import axios from 'axios'
+import { getUsername } from '../storage.js'
+import socket from '../socket.js'
 
 import './ConversationBox.css'
-import logo from './images/logo.png'
-
-const socket = io.connect('http://localhost:3001')
+import logo from '../assets/logo.png'
 
 class ConversationBox extends React.Component {
   constructor (props) {
@@ -32,7 +31,11 @@ class ConversationBox extends React.Component {
     if (this.state.message !== '') {
       const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/add`
 
-      axios.post(url, { message: this.state.message, sender: 'user1' })
+      axios.post(url, { message: this.state.message, sender: getUsername() })
+        .then(({ data }) => {
+          // socket.emit('sendMessage', data)
+          this.setState({ logs: this.state.logs.concat(data), message: '' })
+        })
         .catch(err => this.setState({ error: err }))
     }
   }
@@ -46,9 +49,8 @@ class ConversationBox extends React.Component {
   }
 
   componentDidMount () {
-    socket.on('message', (message) => {
-      this.setState({ logs: [...this.state.logs, message], message: '' })
-    })
+    socket.emit('join', this.props.roomName)
+    socket.on('joined', msg => this.setState({ logs: this.state.logs.concat(msg) }))
 
     this.getMessages()
   }

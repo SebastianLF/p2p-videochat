@@ -29,11 +29,8 @@ function storageAvailable (type = 'sessionStorage') {
 }
 
 export const saveUsername = (username) => {
-  try {
-    storageAvailable()
+  if (storageAvailable()) {
     window.sessionStorage.setItem('username', username)
-  } catch (error) {
-    return error.toString()
   }
 }
 

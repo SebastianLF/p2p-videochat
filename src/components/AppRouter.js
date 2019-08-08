@@ -1,7 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './AppRouter.css'
 import logo from '../assets/logo.png'
-import { Link } from 'react-router-dom'
 
 const AppRouter = ({ roomName, userName, handleChange, handleSubmit, error }) => {
   return (
@@ -9,8 +9,8 @@ const AppRouter = ({ roomName, userName, handleChange, handleSubmit, error }) =>
       <img src={logo} alt='logo' />
       <h2>GLADIUS</h2>
       <form onSubmit={handleSubmit}>
-        <button><Link to='/create'>CREATE ROOM</Link></button>
-        <button><Link to='/join'>JOIN ROOM</Link></button>
+        <Link to='/create'>CREATE ROOM</Link>
+        <Link to='/join'>JOIN ROOM</Link>
       </form>
     </div>
   )

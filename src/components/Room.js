@@ -2,10 +2,10 @@ import React from 'react'
 import ConversationBox from './ConversationBox'
 import './Room.css'
 
-const Room = ({ roomName }) => {
+const Room = ({ match }) => {
   return (
     <div className='room'>
-      <ConversationBox roomName={roomName} />
+      <ConversationBox roomName={match.params.roomId} />
     </div>
   )
 }

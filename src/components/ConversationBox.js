@@ -2,7 +2,7 @@ import React from 'react'
 import Input from './Input.js'
 import MessagesContainer from './MessagesContainer.js'
 import axios from 'axios'
-import { getUsername } from '../storage.js'
+import { getUsername } from '../authentication.js'
 import socket from '../socket.js'
 
 import './ConversationBox.css'

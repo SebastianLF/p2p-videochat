@@ -2,6 +2,13 @@ const router = require('express').Router()
 const Room = require('../models/room.model')
 
 function roomsRouter (io) {
+  const generateUniqueId = () => {
+    // Math.random should be unique because of its seeding algorithm.
+    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+    // after the decimal.
+    return '_' + Math.random().toString(36).substr(2, 9)
+  }
+
   router.route('/').get((req, res) => {
     Room.find()
       .then((rooms) => res.json(rooms))
@@ -9,12 +16,20 @@ function roomsRouter (io) {
   })
 
   router.route('/').post((req, res) => {
-    Room.find()
-      .then((rooms) => res.json(rooms))
+    const newRoom = new Room({ id: generateUniqueId(), creator: req.body.username, name: req.body.username, messages: [], participants: [req.body.username] })
+
+    newRoom.save()
+      .then((room) => res.status(201).json(room))
+      .catch(err => res.status(400).json(err))
+  })
+
+  router.route('/:roomId').get((req, res) => {
+    Room.findOne({ id: req.params.roomId })
+      .then((room) => res.json(room))
       .catch(err => res.status(400).json('Error: ' + err))
   })
 
-  // ------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
 
   router.route('/:roomName').get((req, res) => {
     Room.findOne({ name: req.params.roomName }).select('-_id name participants')

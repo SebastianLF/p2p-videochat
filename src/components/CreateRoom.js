@@ -1,12 +1,15 @@
 import React from 'react'
 import axios from 'axios'
 import constants from '../constants'
+import { saveUsername } from '../authentication'
 import './CreateRoom.css'
 import logo from '../assets/logo.png'
 
 class CreateRoom extends React.Component {
   constructor (props) {
     super(props)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
     this.state = {
       username: '',
       error: ''
@@ -22,11 +25,11 @@ class CreateRoom extends React.Component {
 
     if (this.state.username !== '') {
       axios.post(`${constants.API_URL}/rooms/`, { username: this.state.username })
+        .then(({ data }) => {
+          saveUsername(this.state.username)
+          this.props.history.push(data.id)
+        })
     }
-  }
-
-  componentDidMount () {
-    console.log(constants.API_URL)
   }
 
   render () {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { getUsername } from '../storage.js'
+import { getUsername } from '../authentication.js'
 
 import './Message.css'
 

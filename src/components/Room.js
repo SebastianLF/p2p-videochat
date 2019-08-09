@@ -15,30 +15,11 @@ class Room extends React.Component {
     }
   }
 
-  /* componentWillMount () { 
-     console.log(this.props)
-    axios({
-      url: `${CONSTANTS.API_URL}/rooms/${this.props.match.params.roomId}`,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(({ data }) => {
-      console.log(data)
-      
-      if (!data) {
-        console.log('null')
-        this.props.history.replace('/join')
-      }
-    }).catch((e) => console.error(e))
-  } */
-
   componentDidMount () {
-    axios({
-      url: `${CONSTANTS.API_URL}/rooms/${this.props.match.params.roomId}`,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(({ data }) => this.setState({ loaded: true, isValidId: Boolean(data) }))
+    const url = `${CONSTANTS.API_URL}/rooms/${this.props.match.params.roomId}`
+
+    axios({ url, headers: { 'Content-Type': 'application/json' } })
+      .then(({ data }) => this.setState({ loaded: true, isValidId: Boolean(data) }))
       .catch((e) => console.error(e))
   }
 

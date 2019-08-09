@@ -22,9 +22,6 @@ const Routes = (
 )
 
 function PrivateRoute ({ component: Component, ...rest }) {
-  const roomId = rest.computedMatch.params.roomId
-  console.log(rest)
-
   return (
     <Route
       {...rest}
@@ -34,46 +31,6 @@ function PrivateRoute ({ component: Component, ...rest }) {
       }
     />
   )
-}
-
-/* function test () {
-   /*<Route
-      {...rest}
-      render={props => {
-         if (isAuthenticated()) {
-          return (
-            <Redirect to={{
-            pathname: '/join',
-            state: { roomId, hasParam: RegExp('^/:').test(rest.path) }
-            }}
-          )
-        }
-      } 
-        
-        /* !isAuthenticated() ? (
-        
-        />
-      ) : checkValidRoomUrl(roomId) ? (
-        <Component {...props} />
-      ) : (
-        <NoMatch {...props} />
-      )
-      } 
-    />
-} */
-
-async function checkValidRoomUrl (roomId) {
-  const result = await axios({
-    url: `${CONSTANTS.API_URL}/rooms/${roomId}`,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(({ data }) => data)
-    .catch((e) => console.error(e))
-
-  console.log(result)
-  console.log(result ? true : false )
-  return result
 }
 
 export default Routes

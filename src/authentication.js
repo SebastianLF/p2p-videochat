@@ -5,7 +5,9 @@ const generateUniqueUsername = () => {
   return '_' + Math.random().toString(36).substr(2, 9)
 }
 
-function storageAvailable (type = 'sessionStorage') {
+const key = 'user'
+
+function storageAvailable (type = 'localStorage') {
   const storage = window[type]
   try {
     var x = '__storage_test__'
@@ -30,18 +32,16 @@ function storageAvailable (type = 'sessionStorage') {
 
 export const saveUsername = (username) => {
   if (storageAvailable()) {
-    window.sessionStorage.setItem('username', username)
+    window.localStorage.setItem('user', JSON.stringify(username))
   }
 }
 
 export const getUsername = () => {
-  const key = 'username'
-
-  if (!window.sessionStorage.getItem(key)) {
+  if (!window.localStorage.getItem(key)) {
     return
   }
 
-  return window.sessionStorage.getItem(key)
+  return JSON.parse(window.localStorage.getItem(key))
 }
 
 export const isAuthenticated = () => {

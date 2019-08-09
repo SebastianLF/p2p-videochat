@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from 'axios'
-import { Redirect } from 'react-router-dom'
 import ConversationBox from './ConversationBox'
 import CONSTANTS from '../constants.js'
 import './Room.css'
@@ -10,8 +9,9 @@ class Room extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isValidId: false,
-      loaded: false
+      isValidUrl: false,
+      loaded: false,
+      room: {}
     }
   }
 
@@ -19,14 +19,14 @@ class Room extends React.Component {
     const url = `${CONSTANTS.API_URL}/rooms/${this.props.match.params.roomId}`
 
     axios({ url, headers: { 'Content-Type': 'application/json' } })
-      .then(({ data }) => this.setState({ loaded: true, isValidId: Boolean(data) }))
+      .then(({ data }) => this.setState({ loaded: true, isValidUrl: Boolean(data), room: data }))
       .catch((e) => console.error(e))
   }
 
   render () {
     if (!this.state.loaded) return null
 
-    if (!this.state.isValidId) {
+    if (!this.state.isValidUrl) {
       return <NoMatch {...this.props} />
     }
 

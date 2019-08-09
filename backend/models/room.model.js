@@ -4,8 +4,6 @@ const Schema = mongoose.Schema
 
 const roomSchema = new Schema({
   id: { type: String, required: true, unique: true, trim: true },
-  creator: { type: String, required: true, trim: true },
-  name: { type: String, trim: true },
   participants: [],
   messages: [
     {
@@ -17,7 +15,7 @@ const roomSchema = new Schema({
       }
     }
   ]
-}, { timestamps: true })
+})
 
 const Room = mongoose.model('Room', roomSchema)
 

@@ -6,7 +6,7 @@ function roomsRouter (io) {
     // Math.random should be unique because of its seeding algorithm.
     // Convert it to base 36 (numbers + letters), and grab the first 9 characters
     // after the decimal.
-    return '_' + Math.random().toString(36).substr(2, 9)
+    return Math.random().toString(36).substr(2, 12)
   }
 
   router.route('/').get((req, res) => {
@@ -16,7 +16,14 @@ function roomsRouter (io) {
   })
 
   router.route('/').post((req, res) => {
-    const newRoom = new Room({ id: generateUniqueId(), creator: req.body.username, name: req.body.username, messages: [], participants: [req.body.username] })
+    console.log(req.body.user)
+
+    const newUser = req.body.user || {
+      id: generateUniqueId(),
+      name: `User${generateUniqueId()}`
+    }
+
+    const newRoom = new Room({ id: generateUniqueId(), messages: [], participants: [newUser] })
 
     newRoom.save()
       .then((room) => res.status(201).json(room))

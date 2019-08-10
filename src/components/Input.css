@@ -12,10 +12,18 @@
     padding: 11px 32px 10px 8px;
 }
 
+.send > form > button {
+    border: none;
+    cursor: pointer;
+}
+
+.send > form > .file {
+    width: 40px;
+    display: none
+}
+
 .send > form > button[type='submit'] {
     width: 50px;
-    border: none;
     background: #861C7B;
     color: #fff;
-    cursor: pointer;
 }

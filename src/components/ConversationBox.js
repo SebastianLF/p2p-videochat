@@ -1,4 +1,6 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import Input from './Input.js'
 import MessagesContainer from './MessagesContainer.js'
 import axios from 'axios'
@@ -11,6 +13,7 @@ import logo from '../assets/logo.png'
 class ConversationBox extends React.Component {
   constructor (props) {
     super(props)
+    this.urlRef = React.createRef()
 
     this.handleTyping = this.handleTyping.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
@@ -55,12 +58,27 @@ class ConversationBox extends React.Component {
     this.getMessages()
   }
 
+  copyToClipboard (e) {
+    console.log(this.urlRef)
+    this.urlRef.current.select()
+    document.execCommand('copy')
+  }
+
   render () {
     return (
       <div className='conversation-box'>
         <div className='room-profile'>
-          <img src={logo} alt='room' />
-          <p>{this.props.roomName}</p>
+          <div className='meta'>
+            <div className='id'>
+              <div className='room-id'><span>ROOM</span> {this.props.roomName}</div>
+            </div>
+            <div className='url'>
+              <div className='address'>
+                <input ref={this.urlRef} value={window.location.href} readOnly />
+              </div>
+              <button onClick={this.copyToClipboard.bind(this)}><FontAwesomeIcon icon={faCopy} /></button>
+            </div>
+          </div>
         </div>
         <MessagesContainer messages={this.state.logs} />
         <Input

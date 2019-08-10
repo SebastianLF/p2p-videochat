@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import ConversationBox from './ConversationBox'
+import SidePanel from './SidePanel'
 import CONSTANTS from '../constants.js'
 import './Room.css'
 import NoMatch from './NoMatch'
@@ -32,6 +33,7 @@ class Room extends React.Component {
 
     return (
       <div className='room'>
+        <SidePanel participants={this.state.room.participants} />
         <ConversationBox roomName={this.props.match.params.roomId} />
       </div>
     )

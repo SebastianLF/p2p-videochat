@@ -1,20 +1,19 @@
 .send > form {
     display: flex;
     justify-content: flex-start;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 .send > form > input[name='message'] {
     width: 100%;
     border: none;
-    padding: 15px 10px;
+    padding: 11px 32px 10px 8px;
 }
 
-.send > form > button {
-    border: none;
-    cursor: pointer;
-}
-
-.send > form > input[type='submit'] {
+.send > form > button[type='submit'] {
+    width: 50px;
     border: none;
     background: #861C7B;
     color: #fff;

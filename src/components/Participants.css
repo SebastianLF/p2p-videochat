@@ -1,0 +1,52 @@
+.participants {
+    border-top: 1px solid #32465a
+}
+
+.participants > ul {
+    padding: 0;
+    margin: 0
+}
+
+.participant {
+    display: flex;
+    position: relative;
+    list-style-type: none;
+    padding: 15px 15px
+}
+
+.participant:hover {
+    cursor: pointer;
+    background: #32465a;
+    border-right: 5px solid #435f7a;
+    margin: 0 10px 0 0;
+}
+
+.participant > .wrap {
+    display: flex;
+    position: relative;
+}
+
+.participant > .wrap > .status-indicator {
+    position: absolute;
+    background: #2ecc71;
+    width: 10px;
+    height: 10px;
+    margin: -2px 0 0 -2px;
+    border-radius: 50%;
+    border: 2px solid #2c3e50;
+}
+
+.participant > .wrap > img {
+    width: 40px;
+    height: 40px;
+    margin: 0 10px 0 0;
+    border-radius: 50%
+}
+
+.participant > .wrap > .meta {
+    font-size: 14.4px;
+}
+
+.participant > .wrap > .meta > .name {
+    font-weight: 600;
+}

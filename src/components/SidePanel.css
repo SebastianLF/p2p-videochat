@@ -1,13 +1,4 @@
-@font-face {
-    font-family: 'ProximaNova';
-    font-style: normal;
-    font-weight: 400;
-    src:
-      local('ProximaNova'),
-      local('ProximaNova-Regular'),
-      url(../assets/fonts/ProximaNova-Regular.ttf) format('ttf'),
-      url(../assets/fonts/ProximaNova-Regular.ttf) format('ttf');
-  }
+
   
 
 .sidepanel {
@@ -16,7 +7,7 @@
     min-width: 280px;
     max-width: 340px;
     background: #2c3e50;
-    font-family: 'ProximaNova'
+    color: #FFF
 }
 
 .sidepanel .profile {
@@ -38,4 +29,10 @@
 .sidepanel .profile .wrap p {
     color: #FFF;
     margin-left: 15px;
+}
+
+.sidepanel > .separator {
+    width: calc(100% - 25px);
+    height: 30px;
+    background: #32465a;
 }

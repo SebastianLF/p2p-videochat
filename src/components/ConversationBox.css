@@ -1,6 +1,7 @@
 .conversation-box {
+    position: relative;
     width: 660px;
-    margin: 70px auto;
+    min-height: 100%;
     font-size: 16px;
     background: #f5f5f5;
 }
@@ -15,13 +16,44 @@
     color: #32465a;
 }
 
-.conversation-box .room-profile > img {
-    width: 40px;
-    height: 40px;
-    margin: 10px 12px 0 9px;
+.conversation-box > .room-profile > .meta {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
 }
 
-.conversation-box .room-profile > p {
-    margin: 20px 0px 0 0;
-    text-transform: uppercase
+
+.conversation-box .room-profile .id > img {
+    width: 35px;
+    height: 35px;
+    margin: 0 10px 0 0
+}
+
+.conversation-box .id .room-id, .conversation-box .id img, .conversation-box .url .address, .conversation-box .url .icon {
+    display: inline-block;
+}
+
+.url > .address {
+    margin: 0 10px 0 0
+}
+
+.conversation-box .room-profile .meta .room-id span {
+    font-weight: bold;
+    color: #791188
+}
+
+.conversation-box .room-profile .meta > .url > button {
+    cursor: pointer;
+    padding: 5px 7px;
+    background: #fff;
+    color: #861d95;
+    border: 1px solid #861d95;
+    border-radius: 50%;
+}
+
+/* special case for Firefox */
+.conversation-box .room-profile .meta > .url > button::-moz-focus-inner {
+    border: 0
 }

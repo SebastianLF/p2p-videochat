@@ -3,12 +3,11 @@ import Participants from './Participants'
 import './SidePanel.css'
 
 const SidePanel = (props) => {
-
   return (
     <div className='sidepanel'>
       <div className='profile'>
         <div className='wrap'>
-          <img src='http://emilcarlsson.se/assets/mikeross.png' />
+          <img src='http://emilcarlsson.se/assets/mikeross.png' alt='avatar user' />
           <p>Mike Holls</p>
         </div>
       </div>

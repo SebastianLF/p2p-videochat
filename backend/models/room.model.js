@@ -7,6 +7,7 @@ const roomSchema = new Schema({
   participants: [],
   messages: [
     {
+      id: String,
       text: String,
       sender: String,
       date: {

@@ -22,8 +22,6 @@ class CreateRoom extends React.Component {
 
     axios.post(`${constants.API_URL}/rooms/`, { user: getUsername() })
       .then(({ data }) => {
-        console.log(data)
-
         if (!isAuthenticated()) {
           saveUsername(data.participants[0])
         }

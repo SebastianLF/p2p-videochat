@@ -36,9 +36,37 @@ function roomsRouter (io) {
       .catch(err => res.status(400).json('Error: ' + err))
   })
 
+  router.route('/:roomId/messages/').post((req, res) => {
+    const roomId = req.params.roomId
+    const text = req.body.message
+    const sender = req.body.sender.id
+
+    Room.findOneAndUpdate({ id: roomId },
+      {
+        $push: { messages: { id: generateUniqueId(), text, sender } }
+      },
+      { new: true },
+      function (err, messages) {
+        if (err) throw err
+        console.log(messages)
+        res.status(200).json(messages)
+      }
+    )
+  })
+
+  router.route('/:roomName/messages/').get((req, res) => {
+    const roomName = req.params.roomName
+
+    Room.findOne({ id: roomName })
+      .then((room) => {
+        res.json(room.messages)
+      })
+      .catch(err => res.status(400).json('Error: ' + err))
+  })
+
   // ---------------------------------------------------------------------------
 
-  router.route('/:roomName').get((req, res) => {
+  /* router.route('/:roomName').get((req, res) => {
     Room.findOne({ name: req.params.roomName }).select('-_id name participants')
       .then(room => {
         res.json(room)
@@ -136,7 +164,7 @@ function roomsRouter (io) {
           .catch(err => res.status(500).json('Error: ' + err))
       })
       .catch(err => res.status(400).json('Error: ' + err))
-  })
+  }) */
 
   return router
 }

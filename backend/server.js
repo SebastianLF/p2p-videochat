@@ -29,21 +29,22 @@ app.use('/rooms', roomsRouter)
 
 io.on('connection', function (socket) {
   console.log('A user has connected!', socket.id)
-  const socketId = socket.id
-  socket.on('join', (room) => {
-    socket.join(room, () => {
-      const message = 'A new user entered the chat!'
+  socket.on('join', (roomId) => {
+    socket.join(roomId, () => {
+      const message = `A new user entered the room: ${roomId}`
+      console.log(message)
 
-      /* axios.post(`http://localhost:3001/rooms/${room}/messages/add`, { sender: 'server', message: room })
-        .then(() => {
-          socket.to(room).emit('joined', message)
-        })
-        .catch((err) => console.error(err)
-        ) */
+      socket.on('sendMessage', (message) => {
+
+        axios.post(`http://localhost:3001/rooms/${roomId}/messages/`, message)
+          .then(({ data }) => {
+            const { messages } = data
+            socket.to(roomId).emit('newMessage', messages)
+          })
+          .catch((err) => console.error(err))
+      })
     })
   })
-
-  socket.on('sendMessage', (data) => console.log(data))
 
   socket.on('disconnect', function () {
     console.log('A user got disconnect!')

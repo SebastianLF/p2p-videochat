@@ -32,15 +32,22 @@ class ConversationBox extends React.Component {
     e.preventDefault()
 
     if (this.state.message !== '') {
-      const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/add`
+      console.log('ok')
+      socket.emit('sendMessage', { message: this.state.message, sender: getUsername() })
+      this.setState({ message: '' })
+    }
+
+    /* if (this.state.message !== '') {
+      const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/`
 
       axios.post(url, { message: this.state.message, sender: getUsername() })
         .then(({ data }) => {
           // socket.emit('sendMessage', data)
-          this.setState({ logs: this.state.logs.concat(data), message: '' })
+          console.log(data)
+          this.setState({ logs: [].concat(data.messages), message: '' })
         })
         .catch(err => this.setState({ error: err }))
-    }
+    } */
   }
 
   getMessages () {
@@ -53,13 +60,15 @@ class ConversationBox extends React.Component {
 
   componentDidMount () {
     socket.emit('join', this.props.roomName)
-    socket.on('joined', msg => this.setState({ logs: this.state.logs.concat(msg) }))
+    // socket.on('joined', msg => this.setState({ logs: this.state.logs.concat(msg) }))
+    socket.on('newMessage', (messages) => {
+      this.setState({ logs: [].concat(messages) })
+    })
 
     this.getMessages()
   }
 
   copyToClipboard (e) {
-    console.log(this.urlRef)
     this.urlRef.current.select()
     document.execCommand('copy')
   }

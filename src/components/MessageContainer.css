@@ -1,3 +1,11 @@
 .messages {
-    padding: 10px 0 20px 0;
+    height: auto;
+    min-height: calc(100% - 93px);
+    max-height: calc(100% - 93px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.messages ul li {
+    clear: both;
 }

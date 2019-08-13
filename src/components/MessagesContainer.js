@@ -6,7 +6,9 @@ import './MessageContainer.css'
 const MessagesContainer = ({ messages }) => {
   return (
     <div className='messages'>
-      {messages && messages.map((message) => <Message key={message._id} message={message} />)}
+      <ul>
+        {messages && messages.map((message) => <Message key={message._id} message={message} />)}
+      </ul>
     </div>
   )
 }

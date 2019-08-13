@@ -9,7 +9,7 @@ function Input ({ value, handleTyping, sendMessage, error }) {
     <div className='send'>
       <form>
         <input type='text' name='message' placeholder='Your message' value={value} onChange={handleTyping} />
-        <button className='file'><FontAwesomeIcon icon={faPaperclip} /></button>
+        <button type="button" className='file'><FontAwesomeIcon icon={faPaperclip} /></button>
         <button type='submit' onClick={sendMessage}><FontAwesomeIcon icon={faPaperPlane} /></button>
         <p>{error}</p>
       </form>

@@ -39,7 +39,7 @@ io.on('connection', function (socket) {
         axios.post(`http://localhost:3001/rooms/${roomId}/messages/`, message)
           .then(({ data }) => {
             const { messages } = data
-            socket.to(roomId).emit('newMessage', messages)
+            io.in(roomId).emit('newMessage', messages)
           })
           .catch((err) => console.error(err))
       })

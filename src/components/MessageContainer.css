@@ -9,3 +9,7 @@
 .messages ul li {
     clear: both;
 }
+
+.messages ul {
+    padding: 0;
+}

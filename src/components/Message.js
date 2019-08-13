@@ -7,7 +7,7 @@ import './Message.css'
 // date = date.getHours() + ":" + date.getMinutes() + ' '
 
 const Message = ({ message }) => {
-  const isSender = () => message.sender === getUsername()
+  const isSender = () => message.sender === getUsername().id
   const isInfoMessage = () => message.sender === 'server'
 
   return (

@@ -1,21 +1,29 @@
 import React from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { isAuthenticated } from './authentication.js'
-import AppRouter from './components/AppRouter'
 import CreateRoom from './components/CreateRoom'
-import JoinRoom from './components/JoinRoom'
 import Room from './components/Room'
 import NoMatch from './components/NoMatch'
+import './components/Transitions.css'
 
 const Routes = (
   <BrowserRouter>
-    <Switch>
-      <Route path='/' exact component={AppRouter} />
-      <Route path='/create' component={CreateRoom} />
-      <Route path='/join' component={JoinRoom} />
-      <PrivateRoute path='/:roomId' component={Room} />
-      <Route component={NoMatch} />
-    </Switch>
+    <Route render={({ location }) => (
+      <TransitionGroup>
+        <CSSTransition
+          key={location.key}
+          timeout={300}
+          classNames='fade'
+        >
+          <Switch location={location}>
+            <Route path='/' exact component={CreateRoom} />
+            <PrivateRoute path='/:roomId' component={Room} />
+            <Route component={NoMatch} />
+          </Switch>
+        </CSSTransition>
+      </TransitionGroup>
+    )} />
   </BrowserRouter>
 )
 
@@ -25,7 +33,7 @@ function PrivateRoute ({ component: Component, ...rest }) {
       {...rest}
       render={props => isAuthenticated()
         ? <Component {...props} />
-        : props.history.replace('/join')
+        : <Redirect to={'/'} />
       }
     />
   )

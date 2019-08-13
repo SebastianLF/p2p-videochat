@@ -24,9 +24,9 @@
     display: flex;
     margin: 0 auto;
     width: 95%;
-    height: 600px;
+    height: 400px;
     min-width: 360px;
     max-width: 1000px;
-    padding: 100px 0;
+    margin: 200px auto;
     font-family: 'ProximaNova';
 }

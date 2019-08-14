@@ -1,72 +1,99 @@
 const router = require('express').Router()
 const Room = require('../models/room.model')
 
-function roomsRouter (io) {
-  const generateUniqueId = () => {
-    // Math.random should be unique because of its seeding algorithm.
-    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
-    // after the decimal.
-    return Math.random().toString(36).substr(2, 12)
+const generateUniqueId = () => {
+  // Math.random should be unique because of its seeding algorithm.
+  // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+  // after the decimal.
+  return Math.random().toString(36).substr(2, 12)
+}
+
+router.route('/').get((req, res) => {
+  Room.find()
+    .then((rooms) => res.json(rooms))
+    .catch(err => res.status(400).json('Error: ' + err))
+})
+
+router.route('/').post((req, res) => {
+  console.log(req.body.user)
+
+  const newUser = req.body.user || {
+    id: generateUniqueId(),
+    name: `User${generateUniqueId()}`
   }
 
-  router.route('/').get((req, res) => {
-    Room.find()
-      .then((rooms) => res.json(rooms))
-      .catch(err => res.status(400).json('Error: ' + err))
-  })
+  const newRoom = new Room({ id: generateUniqueId(), messages: [], participants: [newUser] })
 
-  router.route('/').post((req, res) => {
-    console.log(req.body.user)
+  newRoom.save()
+    .then((room) => res.status(201).json(room))
+    .catch(err => res.status(400).json(err))
+})
 
-    const newUser = req.body.user || {
-      id: generateUniqueId(),
-      name: `User${generateUniqueId()}`
+router.route('/:roomId').get((req, res) => {
+  Room.findOne({ id: req.params.roomId })
+    .then((room) => res.json(room))
+    .catch(err => res.status(400).json('Error: ' + err))
+})
+
+router.route('/:roomId/messages/').post((req, res) => {
+  const roomId = req.params.roomId
+  const text = req.body.message
+  const sender = req.body.sender.id
+
+  Room.findOneAndUpdate({ id: roomId },
+    {
+      $push: { messages: { id: generateUniqueId(), text, sender } }
+    },
+    { new: true },
+    function (err, messages) {
+      if (err) throw err
+      console.log(messages)
+      res.status(200).json(messages)
     }
+  )
+})
 
-    const newRoom = new Room({ id: generateUniqueId(), messages: [], participants: [newUser] })
+router.route('/:roomId/messages/').get((req, res) => {
+  const roomId = req.params.roomId
 
-    newRoom.save()
-      .then((room) => res.status(201).json(room))
-      .catch(err => res.status(400).json(err))
-  })
+  Room.findOne({ id: roomId })
+    .then((room) => {
+      res.json(room.messages)
+    })
+    .catch(err => res.status(400).json('Error: ' + err))
+})
 
-  router.route('/:roomId').get((req, res) => {
-    Room.findOne({ id: req.params.roomId })
-      .then((room) => res.json(room))
-      .catch(err => res.status(400).json('Error: ' + err))
-  })
+router.route('/:roomId/participants/').post((req, res) => {
+  const roomId = req.params.roomId
+  const newParticipant = req.body.participant
 
-  router.route('/:roomId/messages/').post((req, res) => {
-    const roomId = req.params.roomId
-    const text = req.body.message
-    const sender = req.body.sender.id
+  // TODO
 
-    Room.findOneAndUpdate({ id: roomId },
-      {
-        $push: { messages: { id: generateUniqueId(), text, sender } }
-      },
-      { new: true },
-      function (err, messages) {
-        if (err) throw err
-        console.log(messages)
-        res.status(200).json(messages)
+  Room.findOne({ id: roomId })
+    .then(room => {
+      if (room === null) {
+        const participantFound = room.participants.find(participant => newParticipant.id === participant.id)
+
+        if (!participantFound) {
+          room.participants.push(newParticipant)
+          room.save()
+            .then((room) => {
+              res.status(200).json(room.participants)
+            })
+            .catch(err => res.status(500).json('Error: ' + err))
+        }
+
+        res.status(200).json(null)
       }
-    )
-  })
 
-  router.route('/:roomName/messages/').get((req, res) => {
-    const roomName = req.params.roomName
+      res.status(200).json(null)
+    })
+    .catch(err => res.status(400).json('Error: ' + err))
+})
 
-    Room.findOne({ id: roomName })
-      .then((room) => {
-        res.json(room.messages)
-      })
-      .catch(err => res.status(400).json('Error: ' + err))
-  })
+// ---------------------------------------------------------------------------
 
-  // ---------------------------------------------------------------------------
-
-  /* router.route('/:roomName').get((req, res) => {
+/* router.route('/:roomName').get((req, res) => {
     Room.findOne({ name: req.params.roomName }).select('-_id name participants')
       .then(room => {
         res.json(room)
@@ -166,7 +193,4 @@ function roomsRouter (io) {
       .catch(err => res.status(400).json('Error: ' + err))
   }) */
 
-  return router
-}
-
-module.exports = roomsRouter
+module.exports = router

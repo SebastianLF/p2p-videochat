@@ -3,8 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const roomSchema = new Schema({
-  id: { type: String, required: true, unique: true, trim: true },
-  participants: [],
+  participants: [{ name: { type: String, required: true, trim: true }, avatar: { type: String, required: true, trim: true } }],
   messages: [
     {
       id: String,

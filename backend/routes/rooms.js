@@ -8,31 +8,23 @@ const generateUniqueId = () => {
   return Math.random().toString(36).substr(2, 12)
 }
 
-router.route('/').get((req, res) => {
-  Room.find()
-    .then((rooms) => res.json(rooms))
-    .catch(err => res.status(400).json('Error: ' + err))
+router.route('/').get(async (req, res) => {
+  const rooms = await Room.find().exec()
+  res.json(rooms)
 })
 
-router.route('/').post((req, res) => {
-  console.log(req.body.user)
-
-  const newUser = req.body.user || {
-    id: generateUniqueId(),
-    name: `User${generateUniqueId()}`
+router.route('/').post(async (req, res) => {
+  try {
+    const roomCreated = await Room.create({ participants: [req.body] })
+    return res.json(roomCreated)
+  } catch (error) {
+    return res.json({ message: error._message })
   }
-
-  const newRoom = new Room({ id: generateUniqueId(), messages: [], participants: [newUser] })
-
-  newRoom.save()
-    .then((room) => res.status(201).json(room))
-    .catch(err => res.status(400).json(err))
 })
 
-router.route('/:roomId').get((req, res) => {
-  Room.findOne({ id: req.params.roomId })
-    .then((room) => res.json(room))
-    .catch(err => res.status(400).json('Error: ' + err))
+router.route('/:roomId').get(async (req, res) => {
+  const roomFound = await Room.findById(req.params.roomId).select('-__v').exec()
+  res.json(roomFound)
 })
 
 router.route('/:roomId/messages/').post((req, res) => {

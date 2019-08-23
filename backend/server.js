@@ -5,8 +5,13 @@ const helmet = require('helmet')
 const dotenv = require('dotenv')
 const app = express()
 const server = require('http').Server(app)
+const morgan = require('morgan')
+const roomsRouter = require('./routes/rooms')
 
-if (process.env.NODE_ENV !== 'production') dotenv.config()
+if (process.env.NODE_ENV !== 'production') {
+  morgan('dev')
+  dotenv.config()
+}
 
 app.use(helmet())
 app.use(cors())
@@ -17,8 +22,6 @@ const connection = mongoose.connection
 connection.once('open', () => {
   console.log('Connection to MONGODB established!')
 })
-
-const roomsRouter = require('./routes/rooms')
 
 require('./socketsHandler')(server)
 

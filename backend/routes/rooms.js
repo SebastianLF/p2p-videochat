@@ -27,22 +27,16 @@ router.route('/:roomId').get(async (req, res) => {
   res.json(roomFound)
 })
 
-router.route('/:roomId/messages/').post((req, res) => {
+router.route('/:roomId/messages/').post(async (req, res) => {
   const roomId = req.params.roomId
   const text = req.body.message
   const sender = req.body.sender.id
 
-  Room.findOneAndUpdate({ id: roomId },
-    {
-      $push: { messages: { id: generateUniqueId(), text, sender } }
-    },
-    { new: true },
-    function (err, messages) {
-      if (err) throw err
-      console.log(messages)
-      res.status(200).json(messages)
-    }
-  )
+  const roomUpdated = await Room.findOneAndUpdate({ _id: roomId }, { $push: { messages: { text, sender } } }, { new: true }).exec()
+
+  if (!roomUpdated) return res.status(400).json({ message: 'Room does not exist.' })
+
+  res.status(200).json(roomUpdated.messages)
 })
 
 router.route('/:roomId/messages/').get((req, res) => {

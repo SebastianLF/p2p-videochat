@@ -42,8 +42,6 @@
     ]
   },
   "devDependencies": {
-    "body-parser": "^1.19.0",
-    "nodemon": "^1.19.1",
-    "standard": "^13.1.0"
+    "nodemon": "^1.19.1"
   }
 }

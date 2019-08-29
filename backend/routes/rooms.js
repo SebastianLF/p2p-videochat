@@ -23,31 +23,32 @@ router.route('/').post(async (req, res) => {
 })
 
 router.route('/:roomId').get(async (req, res) => {
-  const roomFound = await Room.findById(req.params.roomId).select('-__v').exec()
-  res.json(roomFound)
+  try {
+    const roomFound = await Room.findById(req.params.roomId).select('-__v').exec()
+    res.json(roomFound)
+  } catch (error) {
+    res.status(400).end()
+  }
 })
 
-router.route('/:roomId/messages/').post(async (req, res) => {
-  const roomId = req.params.roomId
-  const text = req.body.message
-  const sender = req.body.sender.id
+// URL: /rooms/roomId/messages
+router.route('/:roomId/messages/')
+  .post(async (req, res) => {
+    const roomUpdated = await Room.findOneAndUpdate(
+      { _id: req.params.roomId },
+      { $push: { messages: { text: req.body.text, sender: req.body.sender } } },
+      { new: true })
+      .exec()
 
-  const roomUpdated = await Room.findOneAndUpdate({ _id: roomId }, { $push: { messages: { text, sender } } }, { new: true }).exec()
+    if (!roomUpdated) return res.status(400).json({ message: 'Room does not exist.' })
 
-  if (!roomUpdated) return res.status(400).json({ message: 'Room does not exist.' })
-
-  res.status(200).json(roomUpdated.messages)
-})
-
-router.route('/:roomId/messages/').get((req, res) => {
-  const roomId = req.params.roomId
-
-  Room.findOne({ id: roomId })
-    .then((room) => {
-      res.json(room.messages)
-    })
-    .catch(err => res.status(400).json('Error: ' + err))
-})
+    res.status(200).json(roomUpdated.messages)
+  })
+  .get((req, res) => {
+    Room.findById(req.params.roomId)
+      .then((room) => res.json(room.messages))
+      .catch(err => res.status(400).end())
+  })
 
 router.route('/:roomId/participants/').post((req, res) => {
   const roomId = req.params.roomId

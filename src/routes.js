@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
-import { isAuthenticated } from './authentication.js'
+import { isAuthed } from './authentication.js'
 import CreateRoom from './components/CreateRoom'
 import Room from './components/Room'
 import NoMatch from './components/NoMatch'
+import IsValidRoom from './components/IsValidRoom'
 import './components/Transitions.css'
 
 const Routes = (
@@ -17,8 +18,9 @@ const Routes = (
           classNames='fade'
         >
           <Switch location={location}>
-            <Route path='/' exact component={CreateRoom} />
-            <PrivateRoute path='/:roomId' component={Room} />
+            <Redirect from='/' to='/create' exact />
+            <Route path='/create' exact component={CreateRoom} />
+            <Route path='/:roomId' component={Room} />
             <Route component={NoMatch} />
           </Switch>
         </CSSTransition>
@@ -27,12 +29,13 @@ const Routes = (
   </BrowserRouter>
 )
 
-function PrivateRoute ({ component: Component, ...rest }) {
+
+function PrivateRoute(props) {
   return (
     <Route
-      {...rest}
-      render={props => isAuthenticated()
-        ? <Component {...props} />
+      {...props}
+      render={props => isAuthed
+        ? <Room />
         : <Redirect to={'/'} />
       }
     />

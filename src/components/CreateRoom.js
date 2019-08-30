@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { Redirect } from 'react-router-dom'
 import constants from '../constants'
@@ -6,7 +7,19 @@ import { saveUsername, getUsername, isAuthenticated } from '../authentication'
 import './CreateRoom.css'
 import logo from '../assets/logo.png'
 
-class CreateRoom extends React.Component {
+function CreateRoom() {
+  const [room, setRoom] = useState({})
+
+  return (
+    <div className='create-room'>
+      <img src={logo} alt='logo' />
+      <h2>GLADIUS</h2>
+      <Link to='/defaultroom'>CREATE A ROOM</Link>
+    </div>
+  )
+}
+
+/* class CreateRoom extends React.Component {
   constructor (props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -39,12 +52,12 @@ class CreateRoom extends React.Component {
         <img src={logo} alt='logo' />
         <h2>GLADIUS</h2>
         <form onSubmit={this.handleSubmit}>
-          <div className='error'>{ this.state.error !== '' ? this.state.error : '' }</div>
+          <div className='error' />
           <input type='submit' value='CREATE A NEW ROOM!' />
         </form>
       </div>
     )
   }
-}
+} */
 
 export default CreateRoom

@@ -1,17 +1,53 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import Input from './Input.js'
 import MessagesContainer from './MessagesContainer.js'
 import axios from 'axios'
+import { API_URL } from '../constants'
 import { getUsername } from '../authentication.js'
 import socket from '../socket.js'
-
 import './ConversationBox.css'
-import logo from '../assets/logo.png'
 
-class ConversationBox extends React.Component {
-  constructor (props) {
+
+function ConversationBox(props) {
+  const [messages, setMessages] = useState([])
+  const [inputMessage, setInputMessage] = useState('')
+  const [error, setError] = useState('')
+
+  function postMessage(e) {
+    e.preventDefault()
+    return axios.post(`${API_URL}/rooms/${props.roomId}/messages/`, { text: inputMessage, sender: getUsername() })
+      .then(({ data }) => setMessages(data.messages))
+      .catch(e => setError(e.errorMessage))
+  }
+
+  return (
+    <div className='conversation-box'>
+      <div className='room-profile'>
+        <div className='meta'>
+          <div className='id'>
+            <div className='room-id'><span>ROOM</span> {props.roomId}</div>
+          </div>
+          <div className='url'>
+            <div className='address'>
+              <input value={window.location.href} readOnly />
+            </div>
+          </div>
+        </div>
+      </div>
+      <MessagesContainer messages={messages} />
+      <Input
+        value={inputMessage}
+        handleTyping={(e) => setInputMessage(e.target.value)}
+        sendMessage={postMessage}
+        error={error} />
+    </div>
+  )
+}
+
+/* class ConversationBox extends React.Component {
+  constructor(props) {
     super(props)
     this.urlRef = React.createRef()
 
@@ -24,11 +60,11 @@ class ConversationBox extends React.Component {
     }
   }
 
-  handleTyping (e) {
+  handleTyping(e) {
     this.setState({ message: e.target.value })
   }
 
-  sendMessage (e) {
+  sendMessage(e) {
     e.preventDefault()
 
     if (this.state.message !== '') {
@@ -47,10 +83,10 @@ class ConversationBox extends React.Component {
           this.setState({ logs: [].concat(data.messages), message: '' })
         })
         .catch(err => this.setState({ error: err }))
-    } */
+    } 
   }
 
-  getMessages () {
+  getMessages() {
     const url = `http://localhost:3001/rooms/${this.props.roomName}/messages/`
 
     axios(url)
@@ -58,7 +94,7 @@ class ConversationBox extends React.Component {
       .catch((err) => this.setState({ error: err }))
   }
 
-  componentDidMount () {
+  componentDidMount() {
     socket.emit('join', this.props.roomName)
     // socket.on('joined', msg => this.setState({ logs: this.state.logs.concat(msg) }))
     socket.on('newMessage', (messages) => {
@@ -68,12 +104,12 @@ class ConversationBox extends React.Component {
     this.getMessages()
   }
 
-  copyToClipboard (e) {
+  copyToClipboard(e) {
     this.urlRef.current.select()
     document.execCommand('copy')
   }
 
-  render () {
+  render() {
     return (
       <div className='conversation-box'>
         <div className='room-profile'>
@@ -98,6 +134,6 @@ class ConversationBox extends React.Component {
       </div>
     )
   }
-}
+} */
 
 export default ConversationBox

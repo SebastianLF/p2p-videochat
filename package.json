@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "faker": "^4.1.0",
     "nodemon": "^1.19.1"
   }
 }
